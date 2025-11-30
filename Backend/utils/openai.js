@@ -8,17 +8,27 @@ const getOpenAIAPIResponse = async(message) => {
             "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`
         },
         body: JSON.stringify({
-            model: "deepseek/deepseek-r1:free",
+            model: "tngtech/deepseek-r1t2-chimera:free",
             messages: [{ role: "user", content: message }]
         })
     };
-    try{
+
+    try {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", options);
         const data = await response.json();
-        //console.log(data.choices[0].message.content);  
-        return (data.choices[0].message.content); //reply
-    }catch(err){
+
+        // ------- FIX: Prevent crash -------
+        if (!data?.choices || !data.choices[0]?.message?.content) {
+            console.log("OpenRouter API Error:", data);
+            return "Sorry, I couldn't generate a response.";
+        }
+        // ----------------------------------
+
+        return data.choices[0].message.content;
+
+    } catch(err){
         console.log(err);
+        return "Sorry, something went wrong.";
     }
 }
 
