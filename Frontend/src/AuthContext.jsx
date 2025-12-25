@@ -1,8 +1,8 @@
-import { createContext, useState } from "react"; //(This will store the logged-in user and handle login + logout.)
+import { createContext, useState } from "react";
 
-export const MyContext = createContext();
+export const AuthContext = createContext();
 
-export default function MyProvider({ children }) {
+export default function AuthProvider({ children }) {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
@@ -18,8 +18,8 @@ export default function MyProvider({ children }) {
   };
 
   return (
-    <MyContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
-    </MyContext.Provider>
+    </AuthContext.Provider>
   );
 }
